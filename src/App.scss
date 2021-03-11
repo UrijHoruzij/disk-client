@@ -1,0 +1,14 @@
+html {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+@media screen and (max-width: 687px) {
+  html {
+    overflow-y: scroll;
+  }
+}

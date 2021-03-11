@@ -1,17 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { BrowserRouter as Router } from "react-router-dom";
+import { Provider } from "react-redux";
+import { ThemeProvider } from 'styled-components';
+import theme from 'ui-nature/dist/theme';
+import 'ui-nature/dist/main.css';
+
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { userActions } from "./redux/actions";
+import store from "./redux/store";
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const SSOToken = urlParams.get('SSOToken');
+window.SSOToken = SSOToken;
+if(window.SSOToken){
+  store.dispatch(userActions.fetchUserLogin())
+}else{
+  store.dispatch(userActions.refresh())
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router basename={process.env.PUBLIC_URL}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
