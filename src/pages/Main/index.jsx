@@ -2,7 +2,7 @@ import React from 'react'
 import styled from "styled-components"
 import {Typography,Button,Image} from "ui-nature"
 import img from "./img.jpg";
-import {AUTH_CLIENT_URL} from "../../config"
+import {AUTH_CLIENT_URL, DISK_CLIENT_URL} from "../../config"
 
 const ContainerGrid = styled.div`
     display: grid;
@@ -25,6 +25,7 @@ const ContainerGrid = styled.div`
         "image";    
     }
     @media screen and (max-width: 575px){
+        max-width: 100%;
         align-items: flex-start;
     }
 `
@@ -77,11 +78,10 @@ const LinkWrapperButton = styled(LinkWrapper)`
     @media screen and (max-width: 767px){
         display: flex;
         justify-content: center;
-    }
-    
+    }  
 `
 
-const urlAuth = `${AUTH_CLIENT_URL}/?redirectURL=http://urij.hostronavt.ru/disk-client/`;//http://localhost:3006
+const urlAuth = `${AUTH_CLIENT_URL}/?redirectURL=${DISK_CLIENT_URL}`;
 const Main = () => {
     return (
         <ContainerGrid>
@@ -90,11 +90,6 @@ const Main = () => {
                     Хранилище
                 </Typography>
                 <Buttons>
-                    {/* <LinkWrapper href={urlAuth}>
-                        <Button type="secondary">
-                            Хранилище для Windows
-                        </Button>
-                    </LinkWrapper> */}
                     <LinkWrapperButtonHeader href={urlAuth}>
                         <Button type="primary">
                             Войти

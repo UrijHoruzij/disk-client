@@ -103,8 +103,8 @@ const Card = props => {
         openDirHandler,
         shareClickHandler,
         downloadClickHandler,
-        deleteClickHandler,
-        showPopupLink
+        showPopupLink,
+        showPopupRemove
     } = props;
 
     return (
@@ -127,7 +127,7 @@ const Card = props => {
                             <IconButtonWrapper onClick={() => downloadClickHandler(file)} icon="download" type="primary"/>
                         </>
                     ) : null}
-                    <IconButtonRemove onClick={() => type==="directory" ? null : deleteClickHandler(file)} icon="close"/>
+                    <IconButtonRemove onClick={() => type==="directory" ? null : showPopupRemove(file)} icon="close"/>
                 </Buttons>
             </CardSurface>
         </CardContainer>

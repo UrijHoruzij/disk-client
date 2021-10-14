@@ -34,6 +34,7 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
+  "homepage": "https://urijhoruzij.github.io/disk-client",
   "eslintConfig": {
     "extends": [
       "react-app",

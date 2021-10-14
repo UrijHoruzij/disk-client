@@ -5,8 +5,9 @@ import { FixedSizeGrid as Grid } from 'react-window';
 import { connect } from "react-redux";
 import store from "../../../redux/store";
 import { fileActions } from "../../../redux/actions";
-import Card from './Card'
-import Popup from "./Popup"
+import Card from './Card';
+import Popup from "./Popup";
+import PopupRemove from './PopupRemove';
 import {DISK_URL} from "../../../config";
 import Typography from 'ui-nature/dist/Typography';
 
@@ -61,7 +62,6 @@ const Content = props => {
         files,
         currentDir,
         user,
-        loader
     } = props;
 
     const [search, setSearch] = useState('')
@@ -69,6 +69,8 @@ const Content = props => {
     const [idFile, setIdFile] = useState('')
     const [visiblePopupLink, setVisiblePopupLink] = useState(false)
     const [dragEnter, setDragEnter] = useState(false)
+    const [visiblePopupRemove, setVisiblePopupRemove] = useState(false);
+    const [fileRemove, setFileRemove] = useState();
     
     const dragEnterHandler = (event) => {
         event.preventDefault()
@@ -86,6 +88,13 @@ const Content = props => {
         let files = [...event.dataTransfer.files]
         store.dispatch(fileActions.uploadFile(files, currentDir, user))
         setDragEnter(false)
+    }
+    const showPopupRemove = (file) => {
+        setFileRemove(file)
+        setVisiblePopupRemove(true);
+    }
+    const hidePopupRemove = () => {
+        setVisiblePopupRemove(false);
     }
     const showPopupLink = (file) => {
         let url = DISK_URL+"/file/"
@@ -112,7 +121,7 @@ const Content = props => {
     const openDirHandler = (e, file) => {
         let button = e.target.closest('button');
         if(button){
-            deleteClickHandler(file)
+            showPopupRemove(file)
         }else{
             store.dispatch(fileActions.setPushToStack(currentDir))
             store.dispatch(fileActions.setCurrentDir(file._id))
@@ -125,7 +134,8 @@ const Content = props => {
         store.dispatch(fileActions.downloadFile(file))
     }
     const deleteClickHandler = (file) => {
-        store.dispatch(fileActions.deleteFile(file))
+        hidePopupRemove();
+        store.dispatch(fileActions.deleteFile(file));
     } 
     const searchHandler = (event) => {
         setSearch(event.target.value)
@@ -134,9 +144,9 @@ const Content = props => {
     const changeTypeContent = (file) => {
         if(file !== undefined){
             if(file.type === 'dir' ){
-                return <Card openDirHandler={openDirHandler} deleteClickHandler={deleteClickHandler} file={file} type="directory"/>
+                return <Card showPopupRemove={showPopupRemove} openDirHandler={openDirHandler} file={file} type="directory"/>
             }
-            return <Card showPopupLink={showPopupLink} shareClickHandler={shareClickHandler} deleteClickHandler={deleteClickHandler} downloadClickHandler={downloadClickHandler} file={file} type="file"/>
+            return <Card showPopupRemove={showPopupRemove} showPopupLink={showPopupLink} shareClickHandler={shareClickHandler} downloadClickHandler={downloadClickHandler} file={file} type="file"/>
         }
     }
     
@@ -205,6 +215,12 @@ const Content = props => {
                 linkHandler={linkHandler}
                 removeHandler={removeHandler}
                 idFile={idFile}
+            />
+            <PopupRemove 
+                visiblePopupRemove={visiblePopupRemove}
+                hidePopupRemove={hidePopupRemove}
+                deleteHandler={deleteClickHandler}
+                fileRemove={fileRemove}
             />
         </Container>
     )
